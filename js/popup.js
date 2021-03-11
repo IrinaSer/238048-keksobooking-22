@@ -25,7 +25,11 @@ const createCustomPopup = (data) => {
   } else {
     list.classList.add('hidden');
   }
-  offerElement.querySelector('.popup__description').textContent = offer.description;
+  if (offer.description.length) {
+    offerElement.querySelector('.popup__description').textContent = offer.description;
+  } else {
+    offerElement.querySelector('.popup__description').classList.add('hidden');
+  }
   offerElement.querySelector('.popup__avatar').src = author.avatar;
 
   const offerPhoto = offerElement.querySelector('.popup__photos').children[0];

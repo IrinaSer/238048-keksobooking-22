@@ -1,6 +1,7 @@
 import { setFilterFormDisabled } from './states.js';
 
-const DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data';
+const BOOKING_URL = 'https://22.javascript.pages.academy/keksobooking';
+const DATA_URL = `${BOOKING_URL}/data`;
 
 const getData = (onSuccess) => {
   fetch(DATA_URL)
