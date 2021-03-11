@@ -1,8 +1,8 @@
 /* global L:readonly */
-import {setFormsEnabled} from './states.js';
-import {createCustomPopup} from './popup.js';
-import {getData} from './api.js';
-import {setHousingTypeFilterClick} from './form.js';
+import { setFormsEnabled } from './states.js';
+import { createCustomPopup } from './popup.js';
+import { getData } from './api.js';
+import { setHousingTypeFilterClick } from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -93,11 +93,6 @@ const renderPoints = (offers, housingType) => {
     });
 }
 
-getData((offers) => {
-  renderPoints(offers);
-  setHousingTypeFilterClick(() => renderPoints(offers, '#housing-type'));
-});
-
 const setStartPoint = (isReset) => {
   adressInput.disabled = true;
   adressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
@@ -107,6 +102,11 @@ const setStartPoint = (isReset) => {
     mainMarker.setLatLng(latlng);
   }
 }
+
+getData((offers) => {
+  renderPoints(offers);
+  setHousingTypeFilterClick(() => renderPoints(offers, '#housing-type'));
+});
 
 setStartPoint();
 
