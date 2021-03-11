@@ -6,6 +6,7 @@ const typeSelect = document.querySelector('#type');
 const priceInput = document.querySelector('#price');
 const guestSelect = document.querySelector('#capacity');
 const roomsSelect = document.querySelector('#room_number');
+const housingTypeFilter = document.querySelector('#housing-type');
 
 const HOUSE_PRICE_MAP = {
   bungalow: 0,
@@ -105,4 +106,10 @@ const onSuccess = () => {
   showCreationSuccessInfo();
 }
 
-export { setUserFormSubmit, onSuccess };
+const setHousingTypeFilterClick = (cb) => {
+  housingTypeFilter.addEventListener('change', () => {
+    cb();
+  });
+};
+
+export { setUserFormSubmit, onSuccess, setHousingTypeFilterClick };

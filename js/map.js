@@ -1,12 +1,23 @@
 /* global L:readonly */
-import {setFormsEnabled} from './states.js';
-import {createCustomPopup} from './popup.js';
-import {getData} from './api.js'
+import {
+  setFormsEnabled
+} from './states.js';
+import {
+  createCustomPopup
+} from './popup.js';
+import {
+  getData
+} from './api.js';
+import {
+  setHousingTypeFilterClick
+} from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
   y: 139.753882,
 };
+
+const POINTS_COUNT = 10;
 
 const adressInput = document.querySelector('#address');
 
@@ -24,6 +35,9 @@ L.tileLayer(
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);
+
+let markers;
+markers = new L.LayerGroup().addTo(map);
 
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
@@ -55,23 +69,42 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-getData((points) => {
-  points.forEach((point) => {
-    const mainMarker = L.marker({
-      lat: point.location.lat,
-      lng: point.location.lng,
-    }, {
-      icon: pinIcon,
-    });
+const renderPoints = (offers, housingType) => {
+  markers.clearLayers();
 
-    mainMarker
-      .addTo(map)
-      .bindPopup(
-        createCustomPopup(point), {
-          keepInView: true,
-        },
-      );
-  });
+  offers
+    .slice()
+    .filter(item => {
+      debugger
+      if (housingType) {
+        const value = document.querySelector(housingType).value;
+        return item.offer.type === value;
+      } else {
+        return item;
+      }
+    })
+    .slice(0, POINTS_COUNT)
+    .forEach((offer) => {
+      const mainMarker = L.marker({
+        lat: offer.location.lat,
+        lng: offer.location.lng,
+      }, {
+        icon: pinIcon,
+      });
+
+      mainMarker
+        .addTo(markers)
+        .bindPopup(
+          createCustomPopup(offer), {
+            keepInView: true,
+          },
+        );
+    });
+}
+
+getData((offers) => {
+  renderPoints(offers);
+  setHousingTypeFilterClick(() => renderPoints(offers, '#housing-type'));
 });
 
 const setStartPoint = (isReset) => {
@@ -86,4 +119,6 @@ const setStartPoint = (isReset) => {
 
 setStartPoint();
 
-export { setStartPoint };
+export {
+  setStartPoint
+};
