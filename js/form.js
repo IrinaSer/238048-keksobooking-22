@@ -2,7 +2,7 @@ const typeSelect = document.querySelector('#type');
 const priceInput = document.querySelector('#price');
 const guestSelect = document.querySelector('#capacity');
 const roomsSelect = document.querySelector('#room_number');
-document.querySelector('#title').value = 'Милая, уютная квартирка в центре Токио'; //TODO
+
 const HOUSE_PRICE_MAP = {
   bungalow: 0,
   flat: 1000,
