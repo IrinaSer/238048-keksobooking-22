@@ -9,8 +9,6 @@ const START_ADDRESS = {
 };
 
 const adressInput = document.querySelector('#address');
-adressInput.disabled = true;
-adressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -75,3 +73,17 @@ getData((points) => {
       );
   });
 });
+
+const setStartPoint = (isReset) => {
+  adressInput.disabled = true;
+  adressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
+
+  if (isReset) {
+    const latlng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
+    mainMarker.setLatLng(latlng);
+  }
+}
+
+setStartPoint();
+
+export { setStartPoint };

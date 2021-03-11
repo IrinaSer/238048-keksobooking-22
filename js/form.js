@@ -1,3 +1,7 @@
+import { sendData } from './api.js';
+import { showCreationErrorInfo, showCreationSuccessInfo } from './util.js';
+import { setStartPoint } from './map.js';
+
 const typeSelect = document.querySelector('#type');
 const priceInput = document.querySelector('#price');
 const guestSelect = document.querySelector('#capacity');
@@ -62,17 +66,43 @@ guestSelect.addEventListener('change', () => {
   guestSelect.setCustomValidity('');
 });
 
-const orderForm = document.querySelector('.ad-form');
+const advertForm = document.querySelector('.ad-form');
 
 document.querySelector('.ad-form__submit').addEventListener('click', () => {
   validateGuests();
 });
 
-const setUserFormSubmit = () => {
-  orderForm.addEventListener('submit', () => {
+document.querySelector('.ad-form__reset').addEventListener('click', () => {
+  clearForm();
+});
+
+const setUserFormSubmit = (onSuccess) => {
+  advertForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
     const adressInput = document.querySelector('#address');
     adressInput.disabled = false;
+
+    sendData(
+      () => onSuccess(),
+      () => showCreationErrorInfo(),
+      new FormData(evt.target),
+    );
   });
 };
 
-setUserFormSubmit();
+const filterForm = document.querySelector('.map__filters');
+
+const clearForm = () => {
+  advertForm.reset();
+  filterForm.reset();
+  setTimeout(() => {
+    setStartPoint(true);
+  }, 10);
+}
+
+const onSuccess = () => {
+  clearForm();
+  showCreationSuccessInfo();
+}
+
+export { setUserFormSubmit, onSuccess };

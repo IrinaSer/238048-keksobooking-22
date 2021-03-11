@@ -1,4 +1,5 @@
 import { setFilterFormDisabled } from './states.js';
+import { showAlert } from './util.js';
 
 const BOOKING_URL = 'https://22.javascript.pages.academy/keksobooking';
 const DATA_URL = `${BOOKING_URL}/data`;
@@ -9,15 +10,30 @@ const getData = (onSuccess) => {
     .then((data) => {
       onSuccess(data);
     })
-    .catch((err) => {
-      const error = document.createElement('div');
-      error.textContent = 'Не удалось загрузить объявления 😥';
-      error.setAttribute('style', 'position: fixed; top: 20px; right: 20px; background: rgb(255 4 4 / 50%); padding: 16px; color: white; z-index: 1000; ');
-      document.querySelector('main').appendChild(error);
+    .catch(() => {
+      showAlert('Не удалось загрузить объявления 😥');
       setFilterFormDisabled();
     });
 };
 
-// const sendData = (onSuccess, onFail, body) => {};
+const sendData = (onSuccess, onFail, body) => {
+  fetch(
+    BOOKING_URL,
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        onFail('Не удалось отправить форму. Попробуйте ещё раз response');
+      }
+    })
+    .catch(() => {
+      onFail('Не удалось отправить форму. Попробуйте ещё раз catch');
+    });
+};
 
-export {getData};
+export {getData, sendData};

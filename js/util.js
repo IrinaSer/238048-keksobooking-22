@@ -1,4 +1,5 @@
 const MAX_NUMBER = 100000; // Number.MAX_SAFE_INTEGER;
+const ALERT_SHOW_TIME = 5000;
 
 function checkValues(a, b) {
   const errorText = {
@@ -79,4 +80,69 @@ const transformHouseType = (houseType) => {
   return houseTypeMap[houseType];
 }
 
-export { MAX_NUMBER, getRandomFloat, getRandomInt, getRandomArrayElement, createRandomArray, transformHouseType };
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.setAttribute('style', 'position: fixed; top: 20px; right: 20px; background: rgb(255 4 4 / 50%); padding: 16px; color: white; z-index: 1000; ');
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+}
+
+const removeChild = (parentNode, childNode) => {
+  if (Array.isArray(childNode)) {
+    const closingComment = childNode[1];
+    childNode = childNode[0];
+    parentNode.removeChild(closingComment);
+  }
+  parentNode.removeChild(childNode);
+}
+
+const buildMessage = (template, selector) => {
+  const main = document.querySelector('main');
+  main.appendChild(template);
+
+  const hideMessage = () => {
+    removeChild(main, document.querySelector(selector));
+    document.removeEventListener('click', hideMessage);
+    document.removeEventListener('keydown', removeByEsc);
+  }
+
+  const removeByEsc = (evt) => {
+    if (evt.key === ('Escape' || 'Esc')) {
+      hideMessage();
+    }
+  }
+  const hideErrorButton = document.querySelector('.error__button');
+  if (hideErrorButton) {
+    hideErrorButton.addEventListener('click', hideMessage);
+  }
+  document.addEventListener('click', hideMessage);
+  document.addEventListener('keydown', removeByEsc);
+}
+
+const showCreationSuccessInfo = () => {
+  const successTemplate = document.querySelector('#success').content.cloneNode(true);
+  buildMessage(successTemplate, '.success');
+}
+
+const showCreationErrorInfo = () => {
+  const errorTemplate = document.querySelector('#error').content.cloneNode(true);
+  buildMessage(errorTemplate, '.error');
+}
+
+export {
+  MAX_NUMBER,
+  getRandomFloat,
+  getRandomInt,
+  getRandomArrayElement,
+  createRandomArray,
+  transformHouseType,
+  showAlert,
+  showCreationErrorInfo,
+  showCreationSuccessInfo
+};
