@@ -1,16 +1,8 @@
 /* global L:readonly */
-import {
-  setFormsEnabled
-} from './states.js';
-import {
-  createCustomPopup
-} from './popup.js';
-import {
-  getData
-} from './api.js';
-import {
-  setHousingTypeFilterClick
-} from './form.js';
+import {setFormsEnabled} from './states.js';
+import {createCustomPopup} from './popup.js';
+import {getData} from './api.js';
+import {setHousingTypeFilterClick} from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -75,7 +67,6 @@ const renderPoints = (offers, housingType) => {
   offers
     .slice()
     .filter(item => {
-      debugger
       if (housingType) {
         const value = document.querySelector(housingType).value;
         return item.offer.type === value;
