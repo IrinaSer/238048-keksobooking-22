@@ -10,6 +10,10 @@ const setFormsDisabled = () => {
     field.disabled = true;
   }
 
+  setFilterFormDisabled();
+}
+
+const setFilterFormDisabled = () => {
   filterForm.classList.add('map__filters--disabled');
 
   for (let field of filterFormChilds) {
@@ -34,4 +38,4 @@ const setFormsEnabled = () => {
 setFormsDisabled();
 
 
-export { setFormsEnabled }
+export { setFormsEnabled, setFilterFormDisabled }
