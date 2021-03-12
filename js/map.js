@@ -61,19 +61,36 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-const renderPoints = (offers, housingType) => {
+const getOfferdRank = (offer, filters) => {
+  let rank = 0;
+  for (let key in filters) {
+    if (offer.offer[key] === filters[key]) {
+      rank += 1;
+    }
+  }
+
+  return rank;
+}
+
+const filterOffers = (item) => {
+  const filters = {};
+  const filterValues = [];
+  const formData = new FormData(document.forms['filters']);
+  for (let [key, value] of formData.entries()) {
+    const formattedKey = key.replace('housing-', '');
+    filterValues.push(value !== 'any');
+    filters[formattedKey] = value;
+  }
+  const rank = getOfferdRank(item, filters);
+  return filterValues.filter(item => item).length === rank;
+}
+
+const renderPoints = (offers) => {
   markers.clearLayers();
 
   offers
     .slice()
-    .filter(item => {
-      if (housingType) {
-        const value = document.querySelector(housingType).value;
-        return item.offer.type === value;
-      } else {
-        return item;
-      }
-    })
+    .filter(filterOffers)
     .slice(0, POINTS_COUNT)
     .forEach((offer) => {
       const mainMarker = L.marker({
@@ -95,7 +112,7 @@ const renderPoints = (offers, housingType) => {
 
 getData((offers) => {
   renderPoints(offers);
-  setHousingTypeFilterClick(() => renderPoints(offers, '#housing-type'));
+  setHousingTypeFilterClick(() => renderPoints(offers));
 });
 
 const setStartPoint = (isReset) => {
