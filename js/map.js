@@ -1,4 +1,5 @@
 /* global L:readonly */
+/* global _:readonly */
 import { setFormsEnabled } from './states.js';
 import { createCustomPopup } from './popup.js';
 import { getData } from './api.js';
@@ -10,6 +11,7 @@ const START_ADDRESS = {
 };
 
 const POINTS_COUNT = 10;
+const RERENDER_DELAY = 1000;
 
 const adressInput = document.querySelector('#address');
 
@@ -147,11 +149,11 @@ const setStartPoint = (isReset) => {
 
 getData((offers) => {
   renderPoints(offers);
-  setHousingTypeFilterClick(() => renderPoints(offers, '#housing-type'));
-  setHousingRoomsFilterClick(() => renderPoints(offers));
-  setHousingPriceFilterClick(() => renderPoints(offers));
-  setHousingGuestsFilterClick(() => renderPoints(offers));
-  setHousingFeaturesFilterClick(() => renderPoints(offers));
+  setHousingTypeFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingRoomsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingPriceFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingGuestsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingFeaturesFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
 });
 
 setStartPoint();
