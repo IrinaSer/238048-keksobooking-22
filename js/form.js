@@ -7,6 +7,10 @@ const priceInput = document.querySelector('#price');
 const guestSelect = document.querySelector('#capacity');
 const roomsSelect = document.querySelector('#room_number');
 const housingTypeFilter = document.querySelector('#housing-type');
+const housingRoomsFilter = document.querySelector('#housing-rooms');
+const housingPriceFilter = document.querySelector('#housing-price');
+const housingGuestsFilter = document.querySelector('#housing-guests');
+const housingFeaturesFilter = document.querySelector('#housing-features')
 
 const HOUSE_PRICE_MAP = {
   bungalow: 0,
@@ -67,7 +71,7 @@ guestSelect.addEventListener('change', () => {
   guestSelect.setCustomValidity('');
 });
 
-const advertForm = document.querySelector('.ad-form');
+const advertForm = document.forms['ad-form'];
 
 document.querySelector('.ad-form__submit').addEventListener('click', () => {
   validateGuests();
@@ -91,7 +95,7 @@ const setUserFormSubmit = (onSuccess) => {
   });
 };
 
-const filterForm = document.querySelector('.map__filters');
+const filterForm = document.forms['filters'];
 
 const clearForm = () => {
   advertForm.reset();
@@ -112,4 +116,36 @@ const setHousingTypeFilterClick = (cb) => {
   });
 };
 
-export { setUserFormSubmit, onSuccess, setHousingTypeFilterClick };
+const setHousingRoomsFilterClick = (cb) => {
+  housingRoomsFilter.addEventListener('change', () => {
+    cb();
+  });
+};
+
+const setHousingPriceFilterClick = (cb) => {
+  housingPriceFilter.addEventListener('change', () => {
+    cb();
+  });
+}
+
+const setHousingGuestsFilterClick = (cb) => {
+  housingGuestsFilter.addEventListener('change', () => {
+    cb();
+  });
+};
+
+const setHousingFeaturesFilterClick = (cb) => {
+  housingFeaturesFilter.addEventListener('change', () => {
+    cb();
+  });
+};
+
+export {
+  setUserFormSubmit,
+  onSuccess,
+  setHousingTypeFilterClick,
+  setHousingRoomsFilterClick,
+  setHousingPriceFilterClick,
+  setHousingGuestsFilterClick,
+  setHousingFeaturesFilterClick
+};

@@ -2,7 +2,7 @@
 import { setFormsEnabled } from './states.js';
 import { createCustomPopup } from './popup.js';
 import { getData } from './api.js';
-import { setHousingTypeFilterClick } from './form.js';
+import { setHousingTypeFilterClick, setHousingRoomsFilterClick, setHousingPriceFilterClick, setHousingGuestsFilterClick, setHousingFeaturesFilterClick } from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -61,19 +61,61 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-const renderPoints = (offers, housingType) => {
+const getOfferdRank = (offer, filters) => {
+  let rank = 0;
+  for (let key in filters) {
+    if (key === 'price') {
+      if (filters[key] === 'low' && (offer.offer[key] < 10000)) {
+        rank += 1;
+      } else if (filters[key] === 'middle' && (offer.offer[key] >= 10000 && offer.offer[key] < 50000)) {
+        rank += 1;
+      } else if (filters[key] === 'high' && (offer.offer[key] >= 50000)) {
+        rank += 1;
+      }
+    } else if (key === 'features') {
+      filters[key].forEach(feature => {
+        if (offer.offer[key].includes(feature)) {
+          rank += 1;
+        }
+      });
+    } else {
+      if (offer.offer[key] === filters[key]) {
+        rank += 1;
+      }
+    }
+  }
+
+  return rank;
+}
+
+const filterOffers = (item) => {
+  const filters = {};
+  const filterValues = [];
+  const formData = new FormData(document.forms['filters']);
+  for (let [key, value] of formData.entries()) {
+    const formattedKey = key.replace('housing-', '');
+    if (formattedKey === 'features') {
+      if (!Array.isArray(filters[formattedKey])) {
+        filters[formattedKey] = [];
+      }
+      filters[formattedKey].push(value);
+    } else {
+      let formattedValue = ((formattedKey === 'rooms' || formattedKey === 'guests') && value !== 'any') ? +value : value;
+      filters[formattedKey] = formattedValue;
+    }
+
+    filterValues.push(value !== 'any')
+  }
+  const rank = getOfferdRank(item, filters);
+  return filterValues.filter(item => item).length === rank;
+}
+
+const renderPoints = (offers) => {
   markers.clearLayers();
 
   offers
     .slice()
-    .filter(item => {
-      if (housingType) {
-        const value = document.querySelector(housingType).value;
-        return item.offer.type === value;
-      } else {
-        return item;
-      }
-    })
+    .filter(filterOffers)
     .slice(0, POINTS_COUNT)
     .forEach((offer) => {
       const mainMarker = L.marker({
@@ -106,6 +148,10 @@ const setStartPoint = (isReset) => {
 getData((offers) => {
   renderPoints(offers);
   setHousingTypeFilterClick(() => renderPoints(offers, '#housing-type'));
+  setHousingRoomsFilterClick(() => renderPoints(offers));
+  setHousingPriceFilterClick(() => renderPoints(offers));
+  setHousingGuestsFilterClick(() => renderPoints(offers));
+  setHousingFeaturesFilterClick(() => renderPoints(offers));
 });
 
 setStartPoint();
