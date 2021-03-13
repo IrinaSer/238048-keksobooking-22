@@ -1,7 +1,7 @@
 /* global L:readonly */
 import {setFormsEnabled} from './states.js';
-import {createOffers} from './data.js';
 import {createCustomPopup} from './popup.js';
+import {getData} from './api.js'
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -9,8 +9,6 @@ const START_ADDRESS = {
 };
 
 const adressInput = document.querySelector('#address');
-adressInput.disabled = true;
-adressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -51,27 +49,41 @@ mainMarker.on('moveend', (evt) => {
   adressInput.value = `${x}, ${y}`;
 });
 
-const points = createOffers();
-
 const pinIcon = L.icon({
   iconUrl: '../img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
 
-points.forEach((point) => {
-  const mainMarker = L.marker({
-    lat: point.location.x,
-    lng: point.location.y,
-  }, {
-    icon: pinIcon,
-  });
+getData((points) => {
+  points.forEach((point) => {
+    const mainMarker = L.marker({
+      lat: point.location.lat,
+      lng: point.location.lng,
+    }, {
+      icon: pinIcon,
+    });
 
-  mainMarker
-    .addTo(map)
-    .bindPopup(
-      createCustomPopup(point), {
-        keepInView: true,
-      },
-    );
+    mainMarker
+      .addTo(map)
+      .bindPopup(
+        createCustomPopup(point), {
+          keepInView: true,
+        },
+      );
+  });
 });
+
+const setStartPoint = (isReset) => {
+  adressInput.disabled = true;
+  adressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
+
+  if (isReset) {
+    const latlng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
+    mainMarker.setLatLng(latlng);
+  }
+}
+
+setStartPoint();
+
+export { setStartPoint };
