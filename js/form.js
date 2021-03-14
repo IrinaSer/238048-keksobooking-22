@@ -1,6 +1,7 @@
-import { sendData } from './api.js';
+/* global _:readonly */
+import { sendData, getData } from './api.js';
 import { showCreationErrorInfo, showCreationSuccessInfo } from './util.js';
-import { setStartPoint } from './map.js';
+import { setStartPoint, renderPoints } from './map.js';
 
 const typeSelect = document.querySelector('#type');
 const priceInput = document.querySelector('#price');
@@ -105,6 +106,9 @@ const clearForm = () => {
   advertForm.reset();
   filterForm.reset();
   setTimeout(() => {
+    getData((offers) => {
+      renderPoints(offers);
+    });
     setStartPoint(true);
   }, 10);
 };

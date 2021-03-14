@@ -159,5 +159,6 @@ getData((offers) => {
 setStartPoint();
 
 export {
-  setStartPoint
+  setStartPoint,
+  renderPoints
 };
