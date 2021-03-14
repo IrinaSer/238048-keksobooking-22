@@ -8,26 +8,21 @@ module.exports = {
     filename: 'main.bundle.js',
     path: path.resolve(__dirname, 'build/js'),
   },
-  // plugins: [new MiniCssExtractPlugin()],
+  plugins: [new MiniCssExtractPlugin({
+    filename: "../css/leaflet.css",
+  })],
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          /*{
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: path.resolve(__dirname, '/build/css/leaflet')
-            },
-          }, */'style-loader','css-loader'],
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'], // style-loader'
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-          },
-        ],
+        loader: 'file-loader',
+        options: {
+          name: '../css/[name].[ext]',
+        },
       },
     ],
   }
