@@ -1,5 +1,5 @@
-/* global L:readonly */
 /* global _:readonly */
+import L from 'leaflet';
 import { setFormsEnabled } from './states.js';
 import { createCustomPopup } from './popup.js';
 import { getData } from './api.js';
