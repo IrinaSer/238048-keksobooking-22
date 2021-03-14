@@ -1,8 +1,9 @@
 /* global L:readonly */
-import {setFormsEnabled} from './states.js';
-import {createCustomPopup} from './popup.js';
-import {getData} from './api.js';
-import {setHousingTypeFilterClick} from './form.js';
+/* global _:readonly */
+import { setFormsEnabled } from './states.js';
+import { createCustomPopup } from './popup.js';
+import { getData } from './api.js';
+import { setHousingTypeFilterClick, setHousingRoomsFilterClick, setHousingPriceFilterClick, setHousingGuestsFilterClick, setHousingFeaturesFilterClick } from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -10,6 +11,7 @@ const START_ADDRESS = {
 };
 
 const POINTS_COUNT = 10;
+const RERENDER_DELAY = 1000;
 
 const adressInput = document.querySelector('#address');
 
@@ -64,13 +66,29 @@ const pinIcon = L.icon({
 const getOfferdRank = (offer, filters) => {
   let rank = 0;
   for (let key in filters) {
-    if (offer.offer[key] === filters[key]) {
-      rank += 1;
+    if (key === 'price') {
+      if (filters[key] === 'low' && (offer.offer[key] < 10000)) {
+        rank += 1;
+      } else if (filters[key] === 'middle' && (offer.offer[key] >= 10000 && offer.offer[key] < 50000)) {
+        rank += 1;
+      } else if (filters[key] === 'high' && (offer.offer[key] >= 50000)) {
+        rank += 1;
+      }
+    } else if (key === 'features') {
+      filters[key].forEach(feature => {
+        if (offer.offer[key].includes(feature)) {
+          rank += 1;
+        }
+      });
+    } else {
+      if (offer.offer[key] === filters[key]) {
+        rank += 1;
+      }
     }
   }
 
   return rank;
-}
+};
 
 const filterOffers = (item) => {
   const filters = {};
@@ -78,12 +96,21 @@ const filterOffers = (item) => {
   const formData = new FormData(document.forms['filters']);
   for (let [key, value] of formData.entries()) {
     const formattedKey = key.replace('housing-', '');
-    filterValues.push(value !== 'any');
-    filters[formattedKey] = value;
+    if (formattedKey === 'features') {
+      if (!Array.isArray(filters[formattedKey])) {
+        filters[formattedKey] = [];
+      }
+      filters[formattedKey].push(value);
+    } else {
+      let formattedValue = ((formattedKey === 'rooms' || formattedKey === 'guests') && value !== 'any') ? +value : value;
+      filters[formattedKey] = formattedValue;
+    }
+
+    filterValues.push(value !== 'any')
   }
   const rank = getOfferdRank(item, filters);
   return filterValues.filter(item => item).length === rank;
-}
+};
 
 const renderPoints = (offers) => {
   markers.clearLayers();
@@ -108,12 +135,7 @@ const renderPoints = (offers) => {
           },
         );
     });
-}
-
-getData((offers) => {
-  renderPoints(offers);
-  setHousingTypeFilterClick(() => renderPoints(offers));
-});
+};
 
 const setStartPoint = (isReset) => {
   adressInput.disabled = true;
@@ -123,10 +145,20 @@ const setStartPoint = (isReset) => {
     const latlng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
     mainMarker.setLatLng(latlng);
   }
-}
+};
+
+getData((offers) => {
+  renderPoints(offers);
+  setHousingTypeFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingRoomsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingPriceFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingGuestsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingFeaturesFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+});
 
 setStartPoint();
 
 export {
-  setStartPoint
+  setStartPoint,
+  renderPoints
 };

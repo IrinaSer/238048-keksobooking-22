@@ -37,5 +37,4 @@ const setFormsEnabled = () => {
 
 setFormsDisabled();
 
-
 export { setFormsEnabled, setFilterFormDisabled }
