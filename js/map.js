@@ -1,12 +1,15 @@
 /* global L:readonly */
 import {setFormsEnabled} from './states.js';
 import {createCustomPopup} from './popup.js';
-import {getData} from './api.js'
+import {getData} from './api.js';
+import {setHousingTypeFilterClick} from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
   y: 139.753882,
 };
+
+const POINTS_COUNT = 10;
 
 const adressInput = document.querySelector('#address');
 
@@ -24,6 +27,9 @@ L.tileLayer(
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);
+
+let markers;
+markers = new L.LayerGroup().addTo(map);
 
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
@@ -55,23 +61,58 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-getData((points) => {
-  points.forEach((point) => {
-    const mainMarker = L.marker({
-      lat: point.location.lat,
-      lng: point.location.lng,
-    }, {
-      icon: pinIcon,
-    });
+const getOfferdRank = (offer, filters) => {
+  let rank = 0;
+  for (let key in filters) {
+    if (offer.offer[key] === filters[key]) {
+      rank += 1;
+    }
+  }
 
-    mainMarker
-      .addTo(map)
-      .bindPopup(
-        createCustomPopup(point), {
-          keepInView: true,
-        },
-      );
-  });
+  return rank;
+}
+
+const filterOffers = (item) => {
+  const filters = {};
+  const filterValues = [];
+  const formData = new FormData(document.forms['filters']);
+  for (let [key, value] of formData.entries()) {
+    const formattedKey = key.replace('housing-', '');
+    filterValues.push(value !== 'any');
+    filters[formattedKey] = value;
+  }
+  const rank = getOfferdRank(item, filters);
+  return filterValues.filter(item => item).length === rank;
+}
+
+const renderPoints = (offers) => {
+  markers.clearLayers();
+
+  offers
+    .slice()
+    .filter(filterOffers)
+    .slice(0, POINTS_COUNT)
+    .forEach((offer) => {
+      const mainMarker = L.marker({
+        lat: offer.location.lat,
+        lng: offer.location.lng,
+      }, {
+        icon: pinIcon,
+      });
+
+      mainMarker
+        .addTo(markers)
+        .bindPopup(
+          createCustomPopup(offer), {
+            keepInView: true,
+          },
+        );
+    });
+}
+
+getData((offers) => {
+  renderPoints(offers);
+  setHousingTypeFilterClick(() => renderPoints(offers));
 });
 
 const setStartPoint = (isReset) => {
@@ -86,4 +127,6 @@ const setStartPoint = (isReset) => {
 
 setStartPoint();
 
-export { setStartPoint };
+export {
+  setStartPoint
+};

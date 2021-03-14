@@ -82,8 +82,13 @@ const transformHouseType = (houseType) => {
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
-  alertContainer.setAttribute('style', 'position: fixed; top: 20px; right: 20px; background: rgb(255 4 4 / 50%); padding: 16px; color: white; z-index: 1000; ');
-
+  alertContainer.style.position = 'fixed';
+  alertContainer.style.top = '20px';
+  alertContainer.style.right = '20px';
+  alertContainer.style.background = 'rgb(255 4 4 / 50%)';
+  alertContainer.style.padding = '16px';
+  alertContainer.style.color = 'white';
+  alertContainer.style.zIndex = 1000;
   alertContainer.textContent = message;
 
   document.body.append(alertContainer);
