@@ -1,4 +1,3 @@
-/* global _:readonly */
 import { sendData, getData } from './api.js';
 import { showCreationErrorInfo, showCreationSuccessInfo } from './util.js';
 import { setStartPoint, renderPoints } from './map.js';
