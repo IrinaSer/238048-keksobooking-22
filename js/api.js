@@ -1,8 +1,8 @@
 import { setFilterFormDisabled } from './states.js';
 import { showAlert } from './util.js';
 
-const BOOKING_URL = 'https://22.javascript.pages.academy/keksobooking';
-const DATA_URL = `${BOOKING_URL}/data`;
+const MAIN_BOOKING_URL = 'https://22.javascript.pages.academy/keksobooking';
+const DATA_URL = `${MAIN_BOOKING_URL}/data`;
 
 const getData = (onSuccess) => {
   fetch(DATA_URL)
@@ -18,7 +18,7 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    BOOKING_URL,
+    MAIN_BOOKING_URL,
     {
       method: 'POST',
       body,
@@ -36,4 +36,4 @@ const sendData = (onSuccess, onFail, body) => {
     });
 };
 
-export {getData, sendData};
+export { getData, sendData };

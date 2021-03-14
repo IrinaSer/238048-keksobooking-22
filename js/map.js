@@ -13,7 +13,7 @@ const START_ADDRESS = {
 const POINTS_COUNT = 10;
 const RERENDER_DELAY = 1000;
 
-const adressInput = document.querySelector('#address');
+const addressInput = document.querySelector('#address');
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -23,15 +23,6 @@ const map = L.map('map-canvas')
     lat: START_ADDRESS.x,
     lng: START_ADDRESS.y,
   }, 10);
-
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
-
-let markers;
-markers = new L.LayerGroup().addTo(map);
 
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
@@ -47,23 +38,13 @@ const mainMarker = L.marker({
   icon: mainPinIcon,
 });
 
-mainMarker.addTo(map);
-
-mainMarker.on('moveend', (evt) => {
-  const adress = evt.target.getLatLng();
-  const x = adress.lat.toFixed(5);
-  const y = adress.lng.toFixed(5);
-
-  adressInput.value = `${x}, ${y}`;
-});
-
 const pinIcon = L.icon({
   iconUrl: '../img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
 
-const getOfferdRank = (offer, filters) => {
+const getOfferedRank = (offer, filters) => {
   let rank = 0;
   for (let key in filters) {
     if (key === 'price') {
@@ -102,13 +83,14 @@ const filterOffers = (item) => {
       }
       filters[formattedKey].push(value);
     } else {
-      let formattedValue = ((formattedKey === 'rooms' || formattedKey === 'guests') && value !== 'any') ? +value : value;
+      let formattedValue = ((formattedKey === 'rooms' || formattedKey === 'guests') && value !== 'any') ?
+        Number(value) : value;
       filters[formattedKey] = formattedValue;
     }
 
     filterValues.push(value !== 'any')
   }
-  const rank = getOfferdRank(item, filters);
+  const rank = getOfferedRank(item, filters);
   return filterValues.filter(item => item).length === rank;
 };
 
@@ -138,14 +120,33 @@ const renderPoints = (offers) => {
 };
 
 const setStartPoint = (isReset) => {
-  adressInput.disabled = true;
-  adressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
+  addressInput.disabled = true;
+  addressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
 
   if (isReset) {
     const latlng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
     mainMarker.setLatLng(latlng);
   }
 };
+
+let markers;
+markers = new L.LayerGroup().addTo(map);
+
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
+
+mainMarker.addTo(map);
+
+mainMarker.on('moveend', (evt) => {
+  const address = evt.target.getLatLng();
+  const x = address.lat.toFixed(5);
+  const y = address.lng.toFixed(5);
+
+  addressInput.value = `${x}, ${y}`;
+});
 
 getData((offers) => {
   renderPoints(offers);
