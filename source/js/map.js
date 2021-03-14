@@ -1,5 +1,5 @@
-/* global _:readonly */
 import L from 'leaflet';
+import { debounce } from 'lodash';
 import { setFormsEnabled } from './states.js';
 import { createCustomPopup } from './popup.js';
 import { getData } from './api.js';
@@ -150,11 +150,11 @@ mainMarker.on('moveend', (evt) => {
 
 getData((offers) => {
   renderPoints(offers);
-  setHousingTypeFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingRoomsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingPriceFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingGuestsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingFeaturesFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingTypeFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingRoomsFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingPriceFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingGuestsFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setHousingFeaturesFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
 });
 
 setStartPoint();
