@@ -69,8 +69,8 @@ const resetGuestSelect = () => {
   guestSelect.setCustomValidity('');
 };
 
-const setUserFormSubmit = (onSuccess) => {
-  advertForm.addEventListener('submit', (evt) => {
+const onUserFormSubmit = (evt, onSuccess) => {
+  return () => {
     evt.preventDefault();
     const addressInput = document.querySelector('#address');
     addressInput.disabled = false;
@@ -80,7 +80,11 @@ const setUserFormSubmit = (onSuccess) => {
       () => showCreationErrorInfo(),
       new FormData(evt.target),
     );
-  });
+  };
+};
+
+const setUserFormSubmit = (onSuccess) => {
+  advertForm.addEventListener('submit', onUserFormSubmit(evt, onSuccess));
 };
 
 const clearForm = () => {
