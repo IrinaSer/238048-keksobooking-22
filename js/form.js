@@ -29,12 +29,14 @@ typeSelect.addEventListener('change', (evt) => {
 const timeInSelect = document.querySelector('#timein');
 const timeOutSelect = document.querySelector('#timeout');
 
-timeInSelect.addEventListener('change', (evt) => {
+const onTimeInputHandler = (evt) => {
   const time = evt.target.value;
   timeOutSelect.value = time;
-});
+}
 
-priceInput.addEventListener('change', (evt) => {
+timeInSelect.addEventListener('change', onTimeInputHandler);
+
+const onPriceInputHandler = (evt) => {
   const price = evt.target.value;
   const minPrice = HOUSE_PRICE_MAP[typeSelect.value];
 
@@ -44,10 +46,12 @@ priceInput.addEventListener('change', (evt) => {
     priceInput.setCustomValidity('');
   }
   priceInput.reportValidity();
-});
+}
+
+priceInput.addEventListener('change', onPriceInputHandler);
 
 const validateGuests = () => {
-  const value = roomsSelect.value;
+  const value = Number(roomsSelect.value);
   if (value === '1' && guestSelect.value !== '1') {
     guestSelect.setCustomValidity('Рекомендуемое значение - «для 1 гостя»');
   } else if (value === '2' && (guestSelect.value !== '1' && guestSelect.value !== '2')) {
@@ -103,12 +107,12 @@ const clearForm = () => {
   setTimeout(() => {
     setStartPoint(true);
   }, 10);
-}
+};
 
 const onSuccess = () => {
   clearForm();
   showCreationSuccessInfo();
-}
+};
 
 const setHousingTypeFilterClick = (cb) => {
   housingTypeFilter.addEventListener('change', () => {

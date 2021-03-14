@@ -88,7 +88,7 @@ const getOfferdRank = (offer, filters) => {
   }
 
   return rank;
-}
+};
 
 const filterOffers = (item) => {
   const filters = {};
@@ -110,7 +110,7 @@ const filterOffers = (item) => {
   }
   const rank = getOfferdRank(item, filters);
   return filterValues.filter(item => item).length === rank;
-}
+};
 
 const renderPoints = (offers) => {
   markers.clearLayers();
@@ -135,7 +135,7 @@ const renderPoints = (offers) => {
           },
         );
     });
-}
+};
 
 const setStartPoint = (isReset) => {
   adressInput.disabled = true;
@@ -145,7 +145,7 @@ const setStartPoint = (isReset) => {
     const latlng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
     mainMarker.setLatLng(latlng);
   }
-}
+};
 
 getData((offers) => {
   renderPoints(offers);
