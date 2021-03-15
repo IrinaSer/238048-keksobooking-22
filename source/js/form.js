@@ -69,7 +69,7 @@ const resetGuestSelect = () => {
   guestSelect.setCustomValidity('');
 };
 
-const onUserFormSubmit = (evt, onSuccess) => {
+const onUserFormSubmit = (onSuccess, evt) => {
   return () => {
     evt.preventDefault();
     const addressInput = document.querySelector('#address');
@@ -84,7 +84,7 @@ const onUserFormSubmit = (evt, onSuccess) => {
 };
 
 const setUserFormSubmit = (onSuccess) => {
-  advertForm.addEventListener('submit', onUserFormSubmit(evt, onSuccess));
+  advertForm.addEventListener('submit', onUserFormSubmit(onSuccess));
 };
 
 const clearForm = () => {
