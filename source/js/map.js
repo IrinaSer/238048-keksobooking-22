@@ -124,8 +124,8 @@ const setStartPoint = (isReset) => {
   addressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
 
   if (isReset) {
-    const latlng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
-    mainMarker.setLatLng(latlng);
+    const latLng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
+    mainMarker.setLatLng(latLng);
   }
 };
 
