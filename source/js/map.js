@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 import { setFormsEnabled } from './states.js';
 import { createCustomPopup } from './popup.js';
 import { getData } from './api.js';
-import { setHousingTypeFilterClick, setHousingRoomsFilterClick, setHousingPriceFilterClick, setHousingGuestsFilterClick, setHousingFeaturesFilterClick } from './form.js';
+import { setOnChangeFilterRender } from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -150,11 +150,7 @@ mainMarker.on('moveend', (evt) => {
 
 getData((offers) => {
   renderPoints(offers);
-  setHousingTypeFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingRoomsFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingPriceFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingGuestsFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingFeaturesFilterClick(debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setOnChangeFilterRender(debounce(() => renderPoints(offers), RERENDER_DELAY));
 });
 
 setStartPoint();
