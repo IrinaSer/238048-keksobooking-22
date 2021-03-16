@@ -68,12 +68,10 @@ const resetGuestSelect = () => {
   guestSelect.setCustomValidity('');
 };
 
-const onUserFormSubmit = (onSuccess, evt) => {
-  return () => {
+const onUserFormSubmit = (onSuccess) => {
+  return (evt) => {
     evt.preventDefault();
     validateGuests();
-    const addressInput = document.querySelector('#address');
-    addressInput.disabled = false;
 
     sendData(
       () => onSuccess(),
