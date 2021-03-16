@@ -64,14 +64,14 @@ const validateGuests = () => {
   guestSelect.reportValidity();
 };
 
-const resetGuestSelect = () => {
-  guestSelect.setCustomValidity('');
-};
-
 const onUserFormSubmit = (onSuccess) => {
   return (evt) => {
     evt.preventDefault();
     validateGuests();
+    if (!advertForm.checkValidity()) return;
+    // если оставить поле disabled, то значение поля #address не отправится
+    const addressInput = document.querySelector('#address');
+    addressInput.disabled = false;
 
     sendData(
       () => onSuccess(),
@@ -138,9 +138,9 @@ timeInSelect.addEventListener('change', onTimeInputHandler);
 
 priceInput.addEventListener('change', onPriceInputHandler);
 
-roomsSelect.addEventListener('change', resetGuestSelect);
+roomsSelect.addEventListener('change', validateGuests);
 
-guestSelect.addEventListener('change', resetGuestSelect);
+guestSelect.addEventListener('change', validateGuests);
 
 clearFormButton.addEventListener('click', clearForm);
 
