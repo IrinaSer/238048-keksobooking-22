@@ -23,7 +23,6 @@ const timeInSelect = document.querySelector('#timein');
 const timeOutSelect = document.querySelector('#timeout');
 const advertForm = document.forms['ad-form'];
 const filterForm = document.forms['filters'];
-const sendFormButton = document.querySelector('.ad-form__submit');
 const clearFormButton = document.querySelector('.ad-form__reset');
 
 const onTypeInputHandler = (evt) => {
@@ -72,6 +71,7 @@ const resetGuestSelect = () => {
 const onUserFormSubmit = (onSuccess, evt) => {
   return () => {
     evt.preventDefault();
+    validateGuests();
     const addressInput = document.querySelector('#address');
     addressInput.disabled = false;
 
@@ -143,8 +143,6 @@ priceInput.addEventListener('change', onPriceInputHandler);
 roomsSelect.addEventListener('change', resetGuestSelect);
 
 guestSelect.addEventListener('change', resetGuestSelect);
-
-sendFormButton.addEventListener('click', validateGuests);
 
 clearFormButton.addEventListener('click', clearForm);
 
