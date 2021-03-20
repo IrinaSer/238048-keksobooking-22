@@ -45,6 +45,6 @@ const createCustomPopup = (data) => {
   }
 
   return offerElement;
-}
+};
 
 export { createCustomPopup };

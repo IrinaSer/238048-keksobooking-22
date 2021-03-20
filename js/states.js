@@ -1,40 +1,43 @@
 const advertForm = document.querySelector('.ad-form');
-const advertFormChilds = advertForm.children;
+const advertFormChildren = advertForm.children;
 const filterForm = document.querySelector('.map__filters');
-const filterFormChilds = filterForm.children;
-
-const setFormsDisabled = () => {
-  advertForm.classList.add('ad-form--disabled');
-
-  for (let field of advertFormChilds) {
-    field.disabled = true;
-  }
-
-  setFilterFormDisabled();
-}
+const filterFormChildren = filterForm.children;
 
 const setFilterFormDisabled = () => {
   filterForm.classList.add('map__filters--disabled');
 
-  for (let field of filterFormChilds) {
+  for (let field of filterFormChildren) {
     field.disabled = true;
   }
-}
+};
+
+const setFormsDisabled = () => {
+  advertForm.classList.add('ad-form--disabled');
+
+  for (let field of advertFormChildren) {
+    field.disabled = true;
+  }
+
+  setFilterFormDisabled();
+};
 
 const setFormsEnabled = () => {
   advertForm.classList.remove('ad-form--disabled');
 
-  for (let field of advertFormChilds) {
+  for (let field of advertFormChildren) {
     field.disabled = false;
   }
 
   filterForm.classList.remove('map__filters--disabled');
 
-  for (let field of filterFormChilds) {
+  for (let field of filterFormChildren) {
     field.disabled = false;
   }
-}
+};
 
 setFormsDisabled();
 
-export { setFormsEnabled, setFilterFormDisabled }
+export {
+  setFormsEnabled,
+  setFilterFormDisabled
+}

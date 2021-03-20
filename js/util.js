@@ -1,73 +1,4 @@
-const MAX_NUMBER = 100000; // Number.MAX_SAFE_INTEGER;
 const ALERT_SHOW_TIME = 5000;
-
-function checkValues(a, b) {
-  const errorText = {
-    negative: 'Диапазон может быть только положительный!',
-    incorrectRange: 'Значение «до» меньшее, чем значение «от»!',
-    incorrectValues: 'Введите минимум 2 значения',
-  };
-  let error = '';
-
-  if (typeof a !== 'number' || typeof b !== 'number') {
-    error = errorText.incorrectValues;
-  } else if (a < 0 || b < 0) {
-    error = errorText.negative;
-  } else if (a > b) {
-    error = errorText.incorrectRange;
-  }
-
-  return error;
-}
-
-function getRandomInt(start, end) {
-  const error = checkValues(start, end);
-  if (error.length > 0) {
-    throw new Error(error);
-  }
-
-  if (start === end) return start;
-  let result = start + Math.random() * (end + 1 - start);
-  return Math.floor(result);
-}
-
-function getRandomFloat(start, end, simbolsAfterComma) {
-  let error = '';
-  let result;
-
-  if (!simbolsAfterComma) {
-    error = 'Укажите количество знаков после запятой!';
-  } else {
-    error = checkValues(start, end);
-  }
-  if (error.length > 0) {
-    throw new Error(error);
-  }
-  result = start + Math.random() * (end - start);
-  if (start === end) result = start;
-  return result.toFixed(simbolsAfterComma);
-}
-
-const getRandomArrayElement = (elements) => {
-  return elements[getRandomInt(0, elements.length - 1)];
-};
-
-const createRandomArray = (elements, isUnique) => {
-  let length = getRandomInt(1, elements.length - 1);
-  const result = [];
-
-  if (isUnique) {
-    for (let i = 0; i < length; i++) {
-      result.push(elements[i]);
-    }
-  } else {
-    length = getRandomInt(1, 10);
-    for (let i = 0; i < length; i++) {
-      result.push(getRandomArrayElement(elements));
-    }
-  }
-  return result;
-};
 
 const transformHouseType = (houseType) => {
   const houseTypeMap = {
@@ -78,7 +9,7 @@ const transformHouseType = (houseType) => {
   };
 
   return houseTypeMap[houseType];
-}
+};
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
@@ -96,7 +27,7 @@ const showAlert = (message) => {
   setTimeout(() => {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);
-}
+};
 
 const removeChild = (parentNode, childNode) => {
   if (Array.isArray(childNode)) {
@@ -105,7 +36,7 @@ const removeChild = (parentNode, childNode) => {
     parentNode.removeChild(closingComment);
   }
   parentNode.removeChild(childNode);
-}
+};
 
 const buildMessage = (template, selector) => {
   const main = document.querySelector('main');
@@ -115,37 +46,33 @@ const buildMessage = (template, selector) => {
     removeChild(main, document.querySelector(selector));
     document.removeEventListener('click', hideMessage);
     document.removeEventListener('keydown', removeByEsc);
-  }
+  };
 
   const removeByEsc = (evt) => {
     if (evt.key === ('Escape' || 'Esc')) {
       hideMessage();
     }
-  }
+  };
+
   const hideErrorButton = document.querySelector('.error__button');
   if (hideErrorButton) {
     hideErrorButton.addEventListener('click', hideMessage);
   }
   document.addEventListener('click', hideMessage);
   document.addEventListener('keydown', removeByEsc);
-}
+};
 
 const showCreationSuccessInfo = () => {
   const successTemplate = document.querySelector('#success').content.cloneNode(true);
   buildMessage(successTemplate, '.success');
-}
+};
 
 const showCreationErrorInfo = () => {
   const errorTemplate = document.querySelector('#error').content.cloneNode(true);
   buildMessage(errorTemplate, '.error');
-}
+};
 
 export {
-  MAX_NUMBER,
-  getRandomFloat,
-  getRandomInt,
-  getRandomArrayElement,
-  createRandomArray,
   transformHouseType,
   showAlert,
   showCreationErrorInfo,
