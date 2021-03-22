@@ -31,8 +31,14 @@ const onTypeInputHandler = (evt) => {
   priceInput.setCustomValidity('');
 };
 
-const onTimeInputHandler = (evt) => {
-  timeOutSelect.value = evt.target.value;
+const onTimeInputHandler = (type) => {
+  return (evt) => {
+    if (type === 'timeIn') {
+      timeOutSelect.value = evt.target.value;
+    } else {
+      timeInSelect.value = evt.target.value;
+    }
+  }
 };
 
 const onPriceInputHandler = (evt) => {
@@ -122,7 +128,9 @@ const setOnChangeFilterRender = (cb) => {
 
 typeSelect.addEventListener('change', onTypeInputHandler);
 
-timeInSelect.addEventListener('change', onTimeInputHandler);
+timeInSelect.addEventListener('change', onTimeInputHandler('timeIn'));
+
+timeOutSelect.addEventListener('change', onTimeInputHandler('timeOut'));
 
 priceInput.addEventListener('change', onPriceInputHandler);
 
