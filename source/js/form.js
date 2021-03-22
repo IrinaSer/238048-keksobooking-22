@@ -114,11 +114,15 @@ const filterControls = [
   housingFeaturesFilter,
 ];
 
+const onFilterChange = (cb) => {
+  return () => {
+    cb();
+  }
+};
+
 const setOnChangeFilterRender = (cb) => {
   filterControls.forEach(control => {
-    control.addEventListener('change', () => {
-      cb();
-    });
+    control.addEventListener('change', onFilterChange(cb));
   });
 };
 

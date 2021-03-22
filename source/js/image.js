@@ -7,6 +7,20 @@ const avatarPreview = document.querySelector('.ad-form-header__preview img');
 const photoChooser = document.querySelector('.ad-form__upload input[type=file]');
 const photoPreview = document.querySelector('.ad-form__photo');
 
+const onFileLoad = (reader, preview, isAppendImg) => {
+  return () => {
+    if (isAppendImg) {
+      preview.innerHTML = '';
+      const photoImg = document.createElement('img');
+      photoImg.setAttribute('style', 'width: 40px; height: 44px; margin: 13px auto; display: block;');
+      photoImg.src = reader.result;
+      preview.appendChild(photoImg);
+    } else {
+      preview.src = reader.result;
+    }
+  }
+};
+
 const onFileChange = (chooser, preview, isAppendImg) => {
   return () => {
     const file = chooser.files[0];
@@ -19,17 +33,7 @@ const onFileChange = (chooser, preview, isAppendImg) => {
     if (matches) {
       const reader = new FileReader();
 
-      reader.addEventListener('load', () => {
-        if (isAppendImg) {
-          preview.innerHTML = '';
-          const photoImg = document.createElement('img');
-          photoImg.setAttribute('style', 'width: 40px; height: 44px; margin: 13px auto; display: block;');
-          photoImg.src = reader.result;
-          preview.appendChild(photoImg);
-        } else {
-          preview.src = reader.result;
-        }
-      });
+      reader.addEventListener('load', onFileLoad(reader, preview, isAppendImg));
 
       reader.readAsDataURL(file);
     }
