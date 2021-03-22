@@ -70,7 +70,9 @@ const onUserFormSubmit = (onSuccess) => {
   return (evt) => {
     evt.preventDefault();
     validateGuests();
-    if (!advertForm.checkValidity()) return;
+    if (!advertForm.checkValidity()) {
+      return;
+    };
     // если оставить поле disabled, то значение поля #address не отправится
     const addressInput = document.querySelector('#address');
     addressInput.disabled = false;
