@@ -1,9 +1,9 @@
-/* global L:readonly */
-/* global _:readonly */
+import L from 'leaflet';
+import { debounce } from 'lodash';
 import { setFormsEnabled } from './states.js';
 import { createCustomPopup } from './popup.js';
 import { getData } from './api.js';
-import { setHousingTypeFilterClick, setHousingRoomsFilterClick, setHousingPriceFilterClick, setHousingGuestsFilterClick, setHousingFeaturesFilterClick } from './form.js';
+import { setOnChangeFilterRender } from './form.js';
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -124,8 +124,8 @@ const setStartPoint = (isReset) => {
   addressInput.value = `${START_ADDRESS.x}, ${START_ADDRESS.y}`;
 
   if (isReset) {
-    const latlng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
-    mainMarker.setLatLng(latlng);
+    const latLng = L.latLng(START_ADDRESS.x, START_ADDRESS.y);
+    mainMarker.setLatLng(latLng);
   }
 };
 
@@ -150,11 +150,7 @@ mainMarker.on('moveend', (evt) => {
 
 getData((offers) => {
   renderPoints(offers);
-  setHousingTypeFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingRoomsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingPriceFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingGuestsFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
-  setHousingFeaturesFilterClick(_.debounce(() => renderPoints(offers), RERENDER_DELAY));
+  setOnChangeFilterRender(debounce(() => renderPoints(offers), RERENDER_DELAY));
 });
 
 setStartPoint();
