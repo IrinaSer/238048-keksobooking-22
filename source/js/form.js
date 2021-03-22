@@ -43,6 +43,10 @@ const onTimeInputHandler = (type) => {
 
 const onPriceInputHandler = (evt) => {
   const price = evt.target.value;
+  validatePrice(price);
+};
+
+const validatePrice = (price) => {
   const minPrice = HOUSE_PRICE_MAP[typeSelect.value];
 
   if (price < minPrice) {
@@ -51,7 +55,7 @@ const onPriceInputHandler = (evt) => {
     priceInput.setCustomValidity('');
   }
   priceInput.reportValidity();
-};
+}
 
 const validateGuests = () => {
   const messages = [
@@ -76,6 +80,8 @@ const onUserFormSubmit = (onSuccess) => {
   return (evt) => {
     evt.preventDefault();
     validateGuests();
+    const price = priceInput.value;
+    validatePrice(price);
     if (!advertForm.checkValidity()) return;
     // если оставить поле disabled, то значение поля #address не отправится
     const addressInput = document.querySelector('#address');
