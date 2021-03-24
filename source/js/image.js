@@ -1,4 +1,4 @@
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const FILES_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
 const avatarChooser = document.querySelector('.ad-form__field input[type=file]');
@@ -29,7 +29,7 @@ const onFileChange = (chooser, preview, isAppendImg) => {
     const file = chooser.files[0];
     const fileName = file.name.toLowerCase();
 
-    const matches = FILE_TYPES.some((it) => {
+    const matches = FILES_TYPES.some((it) => {
       return fileName.endsWith(it);
     });
 

@@ -23,10 +23,12 @@ const map = L.map('map-canvas')
     lng: START_ADDRESS.y,
   }, 10);
 
+const mainIconSizes = [52, 52];
+const mainIconAnchors = [26, 52];
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: mainIconSizes,
+  iconAnchor: mainIconAnchors,
 });
 
 const mainMarker = L.marker({
@@ -37,10 +39,12 @@ const mainMarker = L.marker({
   icon: mainPinIcon,
 });
 
+const otherIconsSizes = [40, 40];
+const otherIconsAnchors = [20, 40];
 const pinIcon = L.icon({
   iconUrl: '../img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: otherIconsSizes,
+  iconAnchor: otherIconsAnchors,
 });
 
 const LAYER_IMAGE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
