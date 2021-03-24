@@ -84,7 +84,7 @@ const onUserFormSubmit = (onSuccess) => {
     validateGuests();
     const price = priceInput.value;
     validatePrice(price);
-    if (!advertForm.checkValidity()) return;
+    if (!advertForm.checkValidity()) { return; }
     // если оставить поле disabled, то значение поля #address не отправится
     addressInput.disabled = false;
 
