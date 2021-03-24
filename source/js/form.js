@@ -31,12 +31,22 @@ const onTypeInputHandler = (evt) => {
   priceInput.setCustomValidity('');
 };
 
-const onTimeInputHandler = (evt) => {
-  timeOutSelect.value = evt.target.value;
+const onTimeInputHandler = (type) => {
+  return (evt) => {
+    if (type === 'timeIn') {
+      timeOutSelect.value = evt.target.value;
+    } else {
+      timeInSelect.value = evt.target.value;
+    }
+  }
 };
 
 const onPriceInputHandler = (evt) => {
   const price = evt.target.value;
+  validatePrice(price);
+};
+
+const validatePrice = (price) => {
   const minPrice = HOUSE_PRICE_MAP[typeSelect.value];
 
   if (price < minPrice) {
@@ -70,9 +80,9 @@ const onUserFormSubmit = (onSuccess) => {
   return (evt) => {
     evt.preventDefault();
     validateGuests();
-    if (!advertForm.checkValidity()) {
-      return;
-    };
+    const price = priceInput.value;
+    validatePrice(price);
+    if (!advertForm.checkValidity()) return;
     // если оставить поле disabled, то значение поля #address не отправится
     const addressInput = document.querySelector('#address');
     addressInput.disabled = false;
@@ -114,21 +124,17 @@ const filterControls = [
   housingFeaturesFilter,
 ];
 
-const onFilterChange = (cb) => {
-  return () => {
-    cb();
-  }
-};
-
-const setOnChangeFilterRender = (cb) => {
+const setOnChangeFilterRender = (onFilterChangeHandler) => {
   filterControls.forEach(control => {
-    control.addEventListener('change', onFilterChange(cb));
+    control.addEventListener('change', onFilterChangeHandler);
   });
 };
 
 typeSelect.addEventListener('change', onTypeInputHandler);
 
-timeInSelect.addEventListener('change', onTimeInputHandler);
+timeInSelect.addEventListener('change', onTimeInputHandler('timeIn'));
+
+timeOutSelect.addEventListener('change', onTimeInputHandler('timeOut'));
 
 priceInput.addEventListener('change', onPriceInputHandler);
 
