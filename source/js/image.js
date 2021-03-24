@@ -12,7 +12,10 @@ const onFileLoad = (reader, preview, isAppendImg) => {
     if (isAppendImg) {
       preview.innerHTML = '';
       const photoImg = document.createElement('img');
-      photoImg.setAttribute('style', 'width: 40px; height: 44px; margin: 13px auto; display: block;');
+      photoImg.style.width = '40px';
+      photoImg.style.height = '44px';
+      photoImg.style.margin = '13px auto';
+      photoImg.style.display = 'block';
       photoImg.src = reader.result;
       preview.appendChild(photoImg);
     } else {
