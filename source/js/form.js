@@ -2,6 +2,7 @@ import { sendData, getData } from './api.js';
 import { showCreationErrorInfo, showCreationSuccessInfo } from './util.js';
 import { setStartPoint, renderPoints } from './map.js';
 import { resetFilePreview } from './image.js';
+import { advertForm, filterForm, addressInput } from './elements.js';
 
 const HOUSE_PRICE_MAP = {
   bungalow: 0,
@@ -21,8 +22,6 @@ const housingGuestsFilter = document.querySelector('#housing-guests');
 const housingFeaturesFilter = document.querySelector('#housing-features');
 const timeInSelect = document.querySelector('#timein');
 const timeOutSelect = document.querySelector('#timeout');
-const advertForm = document.forms['ad-form'];
-const filterForm = document.forms['filters'];
 const clearFormButton = document.querySelector('.ad-form__reset');
 
 const onTypeInputHandler = (evt) => {
@@ -63,12 +62,13 @@ const validateGuests = () => {
     'Рекомендуемое значение - «для 2 гостей» или «для 1 гостя»',
     'Рекомендуемое значение - «для 3 гостей», «для 2 гостей» или «для 1 гостя»',
   ];
+  const notForGuests = 100;
   const roomValue = Number(roomsSelect.value);
-  const guestValue = Number(guestSelect.value) === 0 ? 100 : Number(guestSelect.value);
+  const guestValue = Number(guestSelect.value) === 0 ? notForGuests : Number(guestSelect.value);
 
   if (roomValue < guestValue) {
     guestSelect.setCustomValidity(messages[roomValue - 1]);
-  } else if ((roomValue === 100 && guestValue !== 100)) {
+  } else if ((roomValue === notForGuests && guestValue !== notForGuests)) {
     guestSelect.setCustomValidity('Рекомендуемое значение - «не для гостей»');
   } else {
     guestSelect.setCustomValidity('');
@@ -84,7 +84,6 @@ const onUserFormSubmit = (onSuccess) => {
     validatePrice(price);
     if (!advertForm.checkValidity()) return;
     // если оставить поле disabled, то значение поля #address не отправится
-    const addressInput = document.querySelector('#address');
     addressInput.disabled = false;
 
     sendData(
@@ -100,6 +99,7 @@ const setUserFormSubmit = (onSuccess) => {
 };
 
 const clearForm = () => {
+  const renderTimeout = 10;
   advertForm.reset();
   filterForm.reset();
   resetFilePreview();
@@ -108,7 +108,7 @@ const clearForm = () => {
       renderPoints(offers);
     });
     setStartPoint(true);
-  }, 10);
+  }, renderTimeout);
 };
 
 const onSuccess = () => {

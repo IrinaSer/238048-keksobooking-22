@@ -4,6 +4,7 @@ import { setFormsEnabled } from './states.js';
 import { createCustomPopup } from './popup.js';
 import { getData } from './api.js';
 import { setOnChangeFilterRender } from './form.js';
+import { addressInput} from './elements';
 
 const START_ADDRESS = {
   x: 35.681700,
@@ -12,8 +13,6 @@ const START_ADDRESS = {
 
 const POINTS_COUNT = 10;
 const RERENDER_DELAY = 1000;
-
-const addressInput = document.querySelector('#address');
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -44,26 +43,33 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
+const LAYER_IMAGE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
 const getOfferedRank = (offer, filters) => {
+  const middlePrice = 10000;
+  const maxPrice = 50000;
+  const rankValue = 1;
+
   let rank = 0;
+
   for (let key in filters) {
     if (key === 'price') {
-      if (filters[key] === 'low' && (offer.offer[key] < 10000)) {
-        rank += 1;
-      } else if (filters[key] === 'middle' && (offer.offer[key] >= 10000 && offer.offer[key] < 50000)) {
-        rank += 1;
-      } else if (filters[key] === 'high' && (offer.offer[key] >= 50000)) {
-        rank += 1;
+      if (filters[key] === 'low' && (offer.offer[key] < middlePrice)) {
+        rank += rankValue;
+      } else if (filters[key] === 'middle' && (offer.offer[key] >= middlePrice && offer.offer[key] < maxPrice)) {
+        rank += rankValue;
+      } else if (filters[key] === 'high' && (offer.offer[key] >= maxPrice)) {
+        rank += rankValue;
       }
     } else if (key === 'features') {
       filters[key].forEach(feature => {
         if (offer.offer[key].includes(feature)) {
-          rank += 1;
+          rank += rankValue;
         }
       });
     } else {
       if (offer.offer[key] === filters[key]) {
-        rank += 1;
+        rank += rankValue;
       }
     }
   }
@@ -133,7 +139,7 @@ let markers;
 markers = new L.LayerGroup().addTo(map);
 
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  LAYER_IMAGE, {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);

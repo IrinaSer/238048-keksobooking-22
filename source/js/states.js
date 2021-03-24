@@ -1,6 +1,6 @@
-const advertForm = document.querySelector('.ad-form');
+import { advertForm, filterForm } from './elements.js';
+
 const advertFormChildren = advertForm.children;
-const filterForm = document.querySelector('.map__filters');
 const filterFormChildren = filterForm.children;
 
 const setFilterFormDisabled = () => {
