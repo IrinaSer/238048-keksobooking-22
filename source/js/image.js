@@ -1,11 +1,13 @@
+import { advertForm } from './elements.js';
+
 const FILES_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const DEFAULT_AVATAR = 'img/muffin-grey.svg';
 
-const avatarChooser = document.querySelector('.ad-form__field input[type=file]');
-const avatarPreview = document.querySelector('.ad-form-header__preview img');
+const avatarChooser = advertForm.querySelector('.ad-form__field input[type=file]');
+const avatarPreview = advertForm.querySelector('.ad-form-header__preview img');
 
-const photoChooser = document.querySelector('.ad-form__upload input[type=file]');
-const photoPreview = document.querySelector('.ad-form__photo');
+const photoChooser = advertForm.querySelector('.ad-form__upload input[type=file]');
+const photoPreview = advertForm.querySelector('.ad-form__photo');
 
 const onFileLoad = (reader, preview, isAppendImg) => {
   return () => {

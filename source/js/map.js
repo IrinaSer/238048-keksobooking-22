@@ -52,28 +52,28 @@ const LAYER_IMAGE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const getOfferedRank = (offer, filters) => {
   const middlePrice = 10000;
   const maxPrice = 50000;
-  const rankValue = 1;
+  const rankWeight = 1;
 
   let rank = 0;
 
   for (let key in filters) {
     if (key === 'price') {
       if (filters[key] === 'low' && (offer.offer[key] < middlePrice)) {
-        rank += rankValue;
+        rank += rankWeight;
       } else if (filters[key] === 'middle' && (offer.offer[key] >= middlePrice && offer.offer[key] < maxPrice)) {
-        rank += rankValue;
+        rank += rankWeight;
       } else if (filters[key] === 'high' && (offer.offer[key] >= maxPrice)) {
-        rank += rankValue;
+        rank += rankWeight;
       }
     } else if (key === 'features') {
       filters[key].forEach(feature => {
         if (offer.offer[key].includes(feature)) {
-          rank += rankValue;
+          rank += rankWeight;
         }
       });
     } else {
       if (offer.offer[key] === filters[key]) {
-        rank += rankValue;
+        rank += rankWeight;
       }
     }
   }

@@ -11,18 +11,20 @@ const HOUSE_PRICE_MAP = {
   palace: 10000,
 };
 
-const typeSelect = document.querySelector('#type');
-const priceInput = document.querySelector('#price');
-const guestSelect = document.querySelector('#capacity');
-const roomsSelect = document.querySelector('#room_number');
-const housingTypeFilter = document.querySelector('#housing-type');
-const housingRoomsFilter = document.querySelector('#housing-rooms');
-const housingPriceFilter = document.querySelector('#housing-price');
-const housingGuestsFilter = document.querySelector('#housing-guests');
-const housingFeaturesFilter = document.querySelector('#housing-features');
-const timeInSelect = document.querySelector('#timein');
-const timeOutSelect = document.querySelector('#timeout');
-const clearFormButton = document.querySelector('.ad-form__reset');
+const typeSelect = advertForm.querySelector('#type');
+const priceInput = advertForm.querySelector('#price');
+const guestSelect = advertForm.querySelector('#capacity');
+const roomsSelect = advertForm.querySelector('#room_number');
+const timeInSelect = advertForm.querySelector('#timein');
+const timeOutSelect = advertForm.querySelector('#timeout');
+
+const housingTypeFilter = filterForm.querySelector('#housing-type');
+const housingRoomsFilter = filterForm.querySelector('#housing-rooms');
+const housingPriceFilter = filterForm.querySelector('#housing-price');
+const housingGuestsFilter = filterForm.querySelector('#housing-guests');
+const housingFeaturesFilter = filterForm.querySelector('#housing-features');
+
+const clearFormButton = advertForm.querySelector('.ad-form__reset');
 
 const onTypeInputHandler = (evt) => {
   const houseType = evt.target.value;

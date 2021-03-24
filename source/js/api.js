@@ -3,7 +3,7 @@ import { showAlert } from './util.js';
 
 const MAIN_BOOKING_URL = 'https://22.javascript.pages.academy/keksobooking';
 const DATA_URL = `${MAIN_BOOKING_URL}/data`;
-const HTTP_METHODS = {
+const HTTP_METHOD = {
   post: 'POST',
 };
 
@@ -27,7 +27,7 @@ const sendData = (onSuccess, onFail, body) => {
   fetch(
     MAIN_BOOKING_URL,
     {
-      method: HTTP_METHODS.post,
+      method: HTTP_METHOD.post,
       body,
     },
   )
