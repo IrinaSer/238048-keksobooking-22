@@ -3,24 +3,31 @@ import { showAlert } from './util.js';
 
 const MAIN_BOOKING_URL = 'https://22.javascript.pages.academy/keksobooking';
 const DATA_URL = `${MAIN_BOOKING_URL}/data`;
+const HTTP_METHODS = {
+  post: 'POST',
+};
 
 const getData = (onSuccess) => {
+  const getDataErrorMessage = 'Не удалось загрузить объявления 😥';
+
   fetch(DATA_URL)
     .then((response) => response.json())
     .then((data) => {
       onSuccess(data);
     })
     .catch(() => {
-      showAlert('Не удалось загрузить объявления 😥');
+      showAlert(getDataErrorMessage);
       setFilterFormDisabled();
     });
 };
 
 const sendData = (onSuccess, onFail, body) => {
+  const sendDataErrorMessage = 'Не удалось отправить форму. Попробуйте ещё раз';
+
   fetch(
     MAIN_BOOKING_URL,
     {
-      method: 'POST',
+      method: HTTP_METHODS.post,
       body,
     },
   )
@@ -28,11 +35,11 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        onFail(sendDataErrorMessage);
       }
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      onFail(sendDataErrorMessage);
     });
 };
 
